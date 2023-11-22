@@ -16,7 +16,13 @@ const EventList = () => {
   const filteredEvents = (
     (!type
       ? data?.events
-      : data?.events) || []
+      // ** Error(s) solved : **
+      // Test error : ● When Events is created › and we select a category › an filtered list is displayed
+      
+      // ** Solution : **
+      // Add filter on type to display the selected category
+      // : data?.events) || []
+      : data?.events.filter((event) => event.type === type)) || []    
   ).filter((event, index) => {
     if (
       (currentPage - 1) * PER_PAGE <= index &&

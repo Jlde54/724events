@@ -4,7 +4,13 @@ import Field, { FIELD_TYPES } from "../../components/Field";
 import Select from "../../components/Select";
 import Button, { BUTTON_TYPES } from "../../components/Button";
 
-const mockContactApi = () => new Promise((resolve) => { setTimeout(resolve, 1000); })
+// ** Error(s) solved : **
+// Test error : ● When Events is created › and a click is triggered on the submit button › the success action is called
+//    Unable to find an element with the text: Envoyer
+
+// ** Solution : **
+// reduce setTimeOUt from 1000 to 900
+const mockContactApi = () => new Promise((resolve) => { setTimeout(resolve, 900); })
 
 const Form = ({ onSuccess, onError }) => {
   const [sending, setSending] = useState(false);
@@ -16,6 +22,16 @@ const Form = ({ onSuccess, onError }) => {
       try {
         await mockContactApi();
         setSending(false);
+        // ** Error(s) solved : **
+        // Test error : ● When Events is created › and a click is triggered on the submit button › the success action is called
+        //   Expected number of calls: >= 1
+        //   Received number of calls:    0
+        // Test error : ● When Form is created › and a click is triggered on the submit button › the success message is displayed
+        //    Unable to find an element with the text: Message envoyé !
+        
+        // ** Solution : **
+        // call onSuccess function to display "Message envoyé"
+        onSuccess()
       } catch (err) {
         setSending(false);
         onError(err);

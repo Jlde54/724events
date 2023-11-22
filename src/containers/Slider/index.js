@@ -8,23 +8,56 @@ const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
+    // ** Error(s) solved : **
+    // The realisations in the slider are not sorted by degressive order
+
+    // ** Solution : **
+    // Invert the sort order
+
+    // new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
+    new Date(evtB.date) > new Date(evtA.date) ? 1 : -1
   );
   const nextCard = () => {
-    setTimeout(
-      () => setIndex(index < byDateDesc.length ? index + 1 : 0),
-      5000
-    );
+    // ** Error(s) solved : **
+    // Console Error: Cannot read properties of undefined (reading 'length')
+
+    // ** Solution : **
+    // add check on byDateDesc
+
+    if (byDateDesc) {
+      setTimeout(
+        // ** Error(s) solved : **
+        // Empty image is displayed in the slider
+
+        // ** Solution : **
+        // Substract 1 from the byDateDesc.length
+
+        // () => setIndex(index < byDateDesc.length ? index + 1 : 0),
+        () => setIndex(index < byDateDesc.length-1 ? index + 1 : 0),
+        5000
+      );
+    }
   };
   useEffect(() => {
     nextCard();
   });
+
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
-        <>
+        // ** Error(s) solved : **
+        // Console error : Each child in a list should have a unique "key" prop
+        //    Check the render method of `Slider`
+
+        // ** Solution : **
+        // remove "<>" and add a div
+
+        // <>
+        // <div
+        // key={event.title}
           <div
-            key={event.title}
+            key={event.title}>
+            <div
             className={`SlideCard SlideCard--${
               index === idx ? "display" : "hide"
             }`}
@@ -42,15 +75,36 @@ const Slider = () => {
             <div className="SlideCard__pagination">
               {byDateDesc.map((_, radioIdx) => (
                 <input
-                  key={`${event.id}`}
+                  // ** Error(s) solved : **
+                  // Console error : Encountered two children with the same key, `undefined`.
+                  
+                  // ** Solution : **
+                  // update key by "_.title"
+
+                  // key={`${event.id}`}
+                  key={`${_.title}`}
                   type="radio"
                   name="radio-button"
-                  checked={idx === radioIdx}
+                  // ** Error(s) solved : **
+                  // radio button in slider remains blocked on the 3rd button
+                  
+                  // ** Solution : **
+                  // replace idx by index
+
+                  // checked={idx === radioIdx}
+                  checked={index === radioIdx}
+                  // ** Error(s) solved : **
+                  // Console error : You provided a `checked` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultChecked`. Otherwise, set either `onChange` or `readOnly`.
+
+                  // ** Solution : **
+                  // Add readOnly
+                  readOnly
                 />
               ))}
             </div>
           </div>
-        </>
+        </div>
+        // </> remove "</>"
       ))}
     </div>
   );

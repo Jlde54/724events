@@ -13,7 +13,17 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
-  const {last} = useData()
+  // ** Error(s) solved : **
+  // The last event doesn't appear in the footer
+
+  // ** Solution : **
+  // Initialize "last" correctly with the last event in "data"
+
+  // const {last} = useData()
+  const {data} = useData()
+  const last = data && data.events.length > 0
+      ? data.events[data.events.length - 1]
+      : null;
   return <>
     <header>
       <Menu />
@@ -23,7 +33,13 @@ const Page = () => {
         <Slider />
       </section>
       <section className="ServicesContainer">
-        <h2 className="Title">Nos services</h2>
+        {/* ** Error(s) solved : ** */}
+        {/* the link "Nos Services" doesn't connect to the section "Nos Services"/}
+
+        {/* ** Solution : ** */}
+        {/* Ajout de l'id "nos-services" */}
+
+        <h2 id="nos-services" className="Title">Nos services</h2>
         <p>Nous organisons des événements sur mesure partout dans le monde</p>
         <div className="ListContainer">
           <ServiceCard imageSrc="/images/priscilla-du-preez-Q7wGvnbuwj0-unsplash1.png">
@@ -52,12 +68,24 @@ const Page = () => {
         </div>
       </section>
       <section className="EventsContainer">
-        <h2 className="Title">Nos réalisations</h2>
+        {/* ** Error(s) solved : ** */}
+        {/* the link "Nos Services" doesn't connect to the section "Nos Services"/}
+
+        {/* ** Solution : ** */}
+        {/* Ajout de l'id "nos-realisations" */}
+        
+        <h2 id="nos-realisations" className="Title">Nos réalisations</h2>
         <EventList />
       </section>
       <section className="PeoplesContainer">
-        <h2 className="Title">Notre équipe</h2>
-        <p>Une équipe d’experts dédiés à l’ogranisation de vos événements</p>
+        {/* ** Error(s) solved : ** */}
+        {/* the link "Nos Services" doesn't connect to the section "Nos Services"/}
+
+        {/* ** Solution : ** */}
+        {/* Ajout de l'id "notre-equipe" */}
+        
+        <h2 id="notre-equipe" className="Title">Notre équipe</h2>
+        <p>Une équipe d’experts dédiés à l’organisation de vos événements</p>
         <div className="ListContainer">
           <PeopleCard
             imageSrc="/images/stephanie-liverani-Zz5LQe-VSMY-unsplash.png"
@@ -116,13 +144,27 @@ const Page = () => {
     <footer className="row">
       <div className="col presta">
         <h3>Notre derniére prestation</h3>
-        <EventCard
-          imageSrc={last?.cover}
-          title={last?.title}
-          date={new Date(last?.date)}
-          small
-          label="boom"
-        />
+        {/* ** Error(s) solved : ** */}
+        {/* Console error : Failed prop type: The prop `imageSrc` is marked as required in `EventCard`, but its value is `undefined`. */}
+        {/* Console error : Failed prop type: The prop `title` is marked as required in `EventCard`, but its value is `undefined`. */}
+        {/* Console error : Failed prop type: The prop `label` is marked as required in `EventCard`, but its value is `undefined`. */}
+        
+        {/* ** Solution : ** */}
+        {/* Add Test last event recovered : "{last && ()}" */}
+        
+        {last && (
+          <EventCard
+            imageSrc={last?.cover}
+            // Add imageAlt
+            imageAlt={last?.description}
+            title={last?.title}
+            date={new Date(last?.date)}
+            small
+            // update label
+            // label="boom"
+            label={last?.type}
+          />
+        )}
       </div>
       <div className="col contact">
         <h3>Contactez-nous</h3>

@@ -9,9 +9,14 @@
     width: 274px;
     height: 190px;
     .EventCard__imageContainer {
-      height: 126px;
+      // remove height : 126px
+      // height: 126px;
       min-height: auto;
       overflow: hidden;
+    }
+    // add width 100% to img
+    .EventCard__imageContainer img {
+      width: 100%;
     }
     .EventCard__descriptionContainer {
       padding: 0;

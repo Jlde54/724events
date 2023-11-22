@@ -16,7 +16,13 @@ const Select = ({
   const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
   const changeValue = (newValue) => {
-    onChange();
+    // ** Error(s) solved : **
+    // Test error : ● When Events is created › and we select a category › an filtered list is displayed
+   
+    // ** Solution : **
+    // add "newValue" as parameter of onChange
+    // onChange();
+    onChange(newValue);
     setValue(newValue);
     setCollapsed(newValue);
   };
@@ -32,8 +38,12 @@ const Select = ({
             <>
               {!titleEmpty && (
                 <li onClick={() => changeValue(null)}>
-                  <input defaultChecked={!value} name="selected" type="radio" />{" "}
-                  Toutes
+                  <input 
+                    defaultChecked={!value} 
+                    name="selected" 
+                    type="radio" 
+                  />{" "}
+                    Toutes
                 </li>
               )}
               {selection.map((s) => (
